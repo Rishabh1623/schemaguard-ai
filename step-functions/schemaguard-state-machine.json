@@ -1,0 +1,352 @@
+{
+  "Comment": "SchemaGuard AI - Agentic Self-Healing ETL Orchestrator",
+  "StartAt": "RecordExecutionStart",
+  "States": {
+    "RecordExecutionStart": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:putItem",
+      "Parameters": {
+        "TableName": "${execution_state_table}",
+        "Item": {
+          "execution_id": {
+            "S.$": "$.execution_id"
+          },
+          "status": {
+            "S": "STARTED"
+          },
+          "start_time": {
+            "N.$": "$$.State.EnteredTime"
+          },
+          "s3_bucket": {
+            "S.$": "$.s3_bucket"
+          },
+          "s3_key": {
+            "S.$": "$.s3_key"
+          }
+        }
+      },
+      "ResultPath": "$.execution_record",
+      "Next": "AnalyzeSchema"
+    },
+    
+    "AnalyzeSchema": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${schema_analyzer_arn}",
+        "Payload": {
+          "execution_id.$": "$.execution_id",
+          "s3_bucket.$": "$.s3_bucket",
+          "s3_key.$": "$.s3_key",
+          "event_time.$": "$.event_time"
+        }
+      },
+      "ResultPath": "$.schema_analysis",
+      "ResultSelector": {
+        "result.$": "$.Payload"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": ["States.TaskFailed"],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "QuarantineData"
+        }
+      ],
+      "Next": "EvaluateSchemaChange"
+    },
+
+    "EvaluateSchemaChange": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.schema_analysis.result.change_type",
+          "StringEquals": "NO_CHANGE",
+          "Next": "ExecuteETLProduction"
+        },
+        {
+          "Variable": "$.schema_analysis.result.change_type",
+          "StringEquals": "ADDITIVE",
+          "Next": "CheckAutoApproval"
+        },
+        {
+          "Variable": "$.schema_analysis.result.change_type",
+          "StringEquals": "BREAKING",
+          "Next": "GenerateContract"
+        }
+      ],
+      "Default": "QuarantineData"
+    },
+
+    "CheckAutoApproval": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.schema_analysis.result.auto_approve",
+          "BooleanEquals": true,
+          "Next": "ExecuteETLStaging"
+        }
+      ],
+      "Default": "GenerateContract"
+    },
+
+    "GenerateContract": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${contract_generator_arn}",
+        "Payload": {
+          "execution_id.$": "$.execution_id",
+          "schema_diff.$": "$.schema_analysis.result.schema_diff",
+          "current_contract.$": "$.schema_analysis.result.current_contract",
+          "change_type.$": "$.schema_analysis.result.change_type"
+        }
+      },
+      "ResultPath": "$.contract_proposal",
+      "ResultSelector": {
+        "result.$": "$.Payload"
+      },
+      "Next": "NotifyApprovalRequired"
+    },
+
+    "NotifyApprovalRequired": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "${sns_topic_arn}",
+        "Subject": "SchemaGuard: Contract Approval Required",
+        "Message.$": "States.Format('Schema drift detected requiring approval.\\n\\nExecution ID: {}\\nChange Type: {}\\nS3 Location: s3://{}/{}\\n\\nProposed Contract Version: {}\\n\\nPlease review and approve in DynamoDB table.', $.execution_id, $.schema_analysis.result.change_type, $.s3_bucket, $.s3_key, $.contract_proposal.result.contract_version)"
+      },
+      "ResultPath": "$.notification",
+      "Next": "WaitForApproval"
+    },
+
+    "WaitForApproval": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:getItem",
+      "Parameters": {
+        "TableName": "${execution_state_table}",
+        "Key": {
+          "execution_id": {
+            "S.$": "$.execution_id"
+          }
+        }
+      },
+      "ResultPath": "$.approval_check",
+      "Next": "CheckApprovalStatus"
+    },
+
+    "CheckApprovalStatus": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.approval_check.Item.approval_status.S",
+          "StringEquals": "APPROVED",
+          "Next": "ProposeETLPatch"
+        },
+        {
+          "Variable": "$.approval_check.Item.approval_status.S",
+          "StringEquals": "REJECTED",
+          "Next": "QuarantineData"
+        }
+      ],
+      "Default": "WaitForApprovalDelay"
+    },
+
+    "WaitForApprovalDelay": {
+      "Type": "Wait",
+      "Seconds": 300,
+      "Next": "WaitForApproval"
+    },
+
+    "ProposeETLPatch": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${etl_patch_agent_arn}",
+        "Payload": {
+          "execution_id.$": "$.execution_id",
+          "schema_diff.$": "$.schema_analysis.result.schema_diff",
+          "contract_version.$": "$.contract_proposal.result.contract_version"
+        }
+      },
+      "ResultPath": "$.etl_patch",
+      "ResultSelector": {
+        "result.$": "$.Payload"
+      },
+      "Next": "ExecuteETLStaging"
+    },
+
+    "ExecuteETLStaging": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "${glue_job_name}",
+        "Arguments": {
+          "--EXECUTION_MODE": "STAGING",
+          "--EXECUTION_ID.$": "$.execution_id",
+          "--S3_INPUT_PATH.$": "States.Format('s3://{}/{}', $.s3_bucket, $.s3_key)",
+          "--CONTRACT_VERSION.$": "$.contract_proposal.result.contract_version"
+        }
+      },
+      "ResultPath": "$.staging_execution",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "QuarantineData"
+        }
+      ],
+      "Next": "ValidateStaging"
+    },
+
+    "ValidateStaging": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${staging_validator_arn}",
+        "Payload": {
+          "execution_id.$": "$.execution_id",
+          "glue_job_run_id.$": "$.staging_execution.JobRunId",
+          "expected_schema.$": "$.schema_analysis.result.incoming_schema"
+        }
+      },
+      "ResultPath": "$.validation_result",
+      "ResultSelector": {
+        "result.$": "$.Payload"
+      },
+      "Next": "CheckValidation"
+    },
+
+    "CheckValidation": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.validation_result.result.validation_passed",
+          "BooleanEquals": true,
+          "Next": "ExecuteETLProduction"
+        }
+      ],
+      "Default": "QuarantineData"
+    },
+
+    "ExecuteETLProduction": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "${glue_job_name}",
+        "Arguments": {
+          "--EXECUTION_MODE": "PRODUCTION",
+          "--EXECUTION_ID.$": "$.execution_id",
+          "--S3_INPUT_PATH.$": "States.Format('s3://{}/{}', $.s3_bucket, $.s3_key)"
+        }
+      },
+      "ResultPath": "$.production_execution",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "QuarantineData"
+        }
+      ],
+      "Next": "RecordSuccess"
+    },
+
+    "RecordSuccess": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:updateItem",
+      "Parameters": {
+        "TableName": "${execution_state_table}",
+        "Key": {
+          "execution_id": {
+            "S.$": "$.execution_id"
+          }
+        },
+        "UpdateExpression": "SET #status = :status, end_time = :end_time",
+        "ExpressionAttributeNames": {
+          "#status": "status"
+        },
+        "ExpressionAttributeValues": {
+          ":status": {
+            "S": "SUCCESS"
+          },
+          ":end_time": {
+            "N.$": "$$.State.EnteredTime"
+          }
+        }
+      },
+      "ResultPath": null,
+      "Next": "NotifySuccess"
+    },
+
+    "NotifySuccess": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "${sns_topic_arn}",
+        "Subject": "SchemaGuard: ETL Execution Successful",
+        "Message.$": "States.Format('ETL execution completed successfully.\\n\\nExecution ID: {}\\nS3 Location: s3://{}/{}\\nChange Type: {}', $.execution_id, $.s3_bucket, $.s3_key, $.schema_analysis.result.change_type)"
+      },
+      "End": true
+    },
+
+    "QuarantineData": {
+      "Type": "Pass",
+      "Parameters": {
+        "execution_id.$": "$.execution_id",
+        "reason": "Schema validation failed or breaking change detected",
+        "error.$": "$.error"
+      },
+      "ResultPath": "$.quarantine_info",
+      "Next": "RecordFailure"
+    },
+
+    "RecordFailure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:updateItem",
+      "Parameters": {
+        "TableName": "${execution_state_table}",
+        "Key": {
+          "execution_id": {
+            "S.$": "$.execution_id"
+          }
+        },
+        "UpdateExpression": "SET #status = :status, end_time = :end_time, error_info = :error",
+        "ExpressionAttributeNames": {
+          "#status": "status"
+        },
+        "ExpressionAttributeValues": {
+          ":status": {
+            "S": "QUARANTINED"
+          },
+          ":end_time": {
+            "N.$": "$$.State.EnteredTime"
+          },
+          ":error": {
+            "S.$": "States.JsonToString($.quarantine_info)"
+          }
+        }
+      },
+      "ResultPath": null,
+      "Next": "NotifyFailure"
+    },
+
+    "NotifyFailure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "${sns_topic_arn}",
+        "Subject": "SchemaGuard: Data Quarantined",
+        "Message.$": "States.Format('Data has been quarantined due to schema issues.\\n\\nExecution ID: {}\\nS3 Location: s3://{}/{}\\nReason: {}', $.execution_id, $.s3_bucket, $.s3_key, $.quarantine_info.reason)"
+      },
+      "End": true
+    }
+  }
+}
