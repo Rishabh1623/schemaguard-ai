@@ -1,0 +1,33 @@
+# Example Terraform variables file
+# Copy this to terraform.tfvars and update with your values
+
+project_name      = "schemaguard-ai"
+environment       = "dev"
+aws_region        = "us-east-1"
+
+# IMPORTANT: Change this to your email
+notification_email = "your-email@example.com"
+
+# Amazon Bedrock model for agent reasoning
+bedrock_model_id  = "anthropic.claude-3-sonnet-20240229-v1:0"
+
+# Glue configuration
+glue_python_version     = "3"
+glue_worker_type        = "G.1X"
+glue_number_of_workers  = 2
+
+# Data retention policies
+schema_retention_days     = 90
+quarantine_retention_days = 30
+
+# DynamoDB settings
+enable_point_in_time_recovery = true
+
+# Resource tags
+tags = {
+  Project     = "SchemaGuard-AI"
+  ManagedBy   = "Terraform"
+  Purpose     = "Agentic-ETL-Platform"
+  Owner       = "Rishabh"
+  Environment = "dev"
+}

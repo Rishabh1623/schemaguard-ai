@@ -1,0 +1,11 @@
+{
+  "id": "evt-001-baseline",
+  "timestamp": 1735689600000,
+  "event_type": "user_action",
+  "user_id": "user_12345",
+  "data": {
+    "action": "click",
+    "target": "button_submit",
+    "page": "/checkout"
+  }
+}

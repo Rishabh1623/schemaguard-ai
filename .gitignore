@@ -1,0 +1,55 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+!terraform.tfvars.example
+.terraform/
+.terraform.lock.hcl
+terraform.tfplan
+deployment-outputs.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+*.egg-info/
+package/
+
+# Lambda packages
+*.zip
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# AWS
+.aws/
+
+# Environment
+.env
+.env.local
+.schemaguard-env
+
+# Logs
+*.log
+logs/
+
+# Temporary
+tmp/
+temp/
+response.json
+GITHUB_PUSH_SUMMARY.txt
+
+# OS
+Thumbs.db
+
+# Git
+.git/MERGE_MSG
