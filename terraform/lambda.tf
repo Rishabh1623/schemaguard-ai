@@ -1,15 +1,16 @@
 # Lambda functions for agent components
+# Using archive_file data source for automatic packaging (low-code approach)
 
 # Schema Analyzer Lambda
 resource "aws_lambda_function" "schema_analyzer" {
-  filename         = "${path.module}/../agents/schema_analyzer.zip"
-  function_name    = "${local.resource_prefix}-schema-analyzer"
+  filename         = data.archive_file.schema_analyzer.output_path
+  function_name    = local.lambda_names.schema_analyzer
   role            = aws_iam_role.lambda_agent.arn
   handler         = "schema_analyzer.lambda_handler"
-  source_code_hash = fileexists("${path.module}/../agents/schema_analyzer.zip") ? filebase64sha256("${path.module}/../agents/schema_analyzer.zip") : null
-  runtime         = "python3.11"
-  timeout         = 300
-  memory_size     = 512
+  source_code_hash = data.archive_file.schema_analyzer.output_base64sha256
+  runtime         = local.lambda_runtime
+  timeout         = local.lambda_timeout
+  memory_size     = local.lambda_memory_size
 
   environment {
     variables = {
@@ -25,20 +26,21 @@ resource "aws_lambda_function" "schema_analyzer" {
     local.common_tags,
     {
       Name = "SchemaGuard Schema Analyzer"
+      Component = "Agent"
     }
   )
 }
 
 # Contract Generator Lambda
 resource "aws_lambda_function" "contract_generator" {
-  filename         = "${path.module}/../agents/contract_generator.zip"
-  function_name    = "${local.resource_prefix}-contract-generator"
+  filename         = data.archive_file.contract_generator.output_path
+  function_name    = local.lambda_names.contract_generator
   role            = aws_iam_role.lambda_agent.arn
   handler         = "contract_generator.lambda_handler"
-  source_code_hash = fileexists("${path.module}/../agents/contract_generator.zip") ? filebase64sha256("${path.module}/../agents/contract_generator.zip") : null
-  runtime         = "python3.11"
-  timeout         = 300
-  memory_size     = 512
+  source_code_hash = data.archive_file.contract_generator.output_base64sha256
+  runtime         = local.lambda_runtime
+  timeout         = local.lambda_timeout
+  memory_size     = local.lambda_memory_size
 
   environment {
     variables = {
@@ -53,20 +55,21 @@ resource "aws_lambda_function" "contract_generator" {
     local.common_tags,
     {
       Name = "SchemaGuard Contract Generator"
+      Component = "Agent"
     }
   )
 }
 
 # ETL Patch Agent Lambda
 resource "aws_lambda_function" "etl_patch_agent" {
-  filename         = "${path.module}/../agents/etl_patch_agent.zip"
-  function_name    = "${local.resource_prefix}-etl-patch-agent"
+  filename         = data.archive_file.etl_patch_agent.output_path
+  function_name    = local.lambda_names.etl_patch_agent
   role            = aws_iam_role.lambda_agent.arn
   handler         = "etl_patch_agent.lambda_handler"
-  source_code_hash = fileexists("${path.module}/../agents/etl_patch_agent.zip") ? filebase64sha256("${path.module}/../agents/etl_patch_agent.zip") : null
-  runtime         = "python3.11"
-  timeout         = 300
-  memory_size     = 512
+  source_code_hash = data.archive_file.etl_patch_agent.output_base64sha256
+  runtime         = local.lambda_runtime
+  timeout         = local.lambda_timeout
+  memory_size     = local.lambda_memory_size
 
   environment {
     variables = {
@@ -80,28 +83,29 @@ resource "aws_lambda_function" "etl_patch_agent" {
     local.common_tags,
     {
       Name = "SchemaGuard ETL Patch Agent"
+      Component = "Agent"
     }
   )
 }
 
 # Staging Validator Lambda
 resource "aws_lambda_function" "staging_validator" {
-  filename         = "${path.module}/../agents/staging_validator.zip"
-  function_name    = "${local.resource_prefix}-staging-validator"
+  filename         = data.archive_file.staging_validator.output_path
+  function_name    = local.lambda_names.staging_validator
   role            = aws_iam_role.lambda_agent.arn
   handler         = "staging_validator.lambda_handler"
-  source_code_hash = fileexists("${path.module}/../agents/staging_validator.zip") ? filebase64sha256("${path.module}/../agents/staging_validator.zip") : null
-  runtime         = "python3.11"
-  timeout         = 600
-  memory_size     = 1024
+  source_code_hash = data.archive_file.staging_validator.output_base64sha256
+  runtime         = local.lambda_runtime
+  timeout         = 600  # Longer timeout for Athena queries
+  memory_size     = 1024  # More memory for data processing
 
   environment {
     variables = {
-      STAGING_BUCKET   = aws_s3_bucket.staging.id
-      CURATED_BUCKET   = aws_s3_bucket.curated.id
-      ATHENA_DATABASE  = aws_glue_catalog_database.schemaguard.name
-      ATHENA_OUTPUT    = "s3://${aws_s3_bucket.staging.id}/athena-results/"
-      ENVIRONMENT      = var.environment
+      STAGING_BUCKET        = aws_s3_bucket.staging.id
+      CURATED_BUCKET        = aws_s3_bucket.curated.id
+      GLUE_DATABASE         = aws_glue_catalog_database.schemaguard.name
+      ATHENA_OUTPUT_BUCKET  = aws_s3_bucket.staging.id
+      ENVIRONMENT           = var.environment
     }
   }
 
@@ -109,35 +113,36 @@ resource "aws_lambda_function" "staging_validator" {
     local.common_tags,
     {
       Name = "SchemaGuard Staging Validator"
+      Component = "Agent"
     }
   )
 }
 
-# CloudWatch Log Groups for Lambda functions
+# CloudWatch Log Groups for Lambda functions (centralized configuration)
 resource "aws_cloudwatch_log_group" "schema_analyzer" {
   name              = "/aws/lambda/${aws_lambda_function.schema_analyzer.function_name}"
-  retention_in_days = 30
+  retention_in_days = local.log_retention_days
 
   tags = local.common_tags
 }
 
 resource "aws_cloudwatch_log_group" "contract_generator" {
   name              = "/aws/lambda/${aws_lambda_function.contract_generator.function_name}"
-  retention_in_days = 30
+  retention_in_days = local.log_retention_days
 
   tags = local.common_tags
 }
 
 resource "aws_cloudwatch_log_group" "etl_patch_agent" {
   name              = "/aws/lambda/${aws_lambda_function.etl_patch_agent.function_name}"
-  retention_in_days = 30
+  retention_in_days = local.log_retention_days
 
   tags = local.common_tags
 }
 
 resource "aws_cloudwatch_log_group" "staging_validator" {
   name              = "/aws/lambda/${aws_lambda_function.staging_validator.function_name}"
-  retention_in_days = 30
+  retention_in_days = local.log_retention_days
 
   tags = local.common_tags
 }
