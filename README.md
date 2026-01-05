@@ -10,7 +10,9 @@
 
 ## 🚀 Quick Start
 
-**Deploy in 30 minutes:** Follow [`UBUNTU_DEPLOYMENT_MASTER.md`](UBUNTU_DEPLOYMENT_MASTER.md)
+**📖 Complete Deployment Guide:** [`UBUNTU_DEPLOYMENT_MASTER.md`](UBUNTU_DEPLOYMENT_MASTER.md)
+
+Everything you need to deploy, test, and run this project is in ONE file above.
 
 ## Overview
 
@@ -217,22 +219,49 @@ This demonstrates real agent design, not just LLM automation.
 | **AWS Services** | 10+ |
 | **Terraform Resources** | 30+ |
 | **Agent Functions** | 5 |
+| **Test Scenarios** | 8 |
 | **Completion** | 100% ✅ |
 
-## 📚 Essential Documentation
+## 📁 Project Structure
 
-### 🎯 Start Here
-- **[`UBUNTU_DEPLOYMENT_MASTER.md`](UBUNTU_DEPLOYMENT_MASTER.md)** - Complete deployment guide (30-45 min)
-- **[`PROJECT_COMPLETE.md`](PROJECT_COMPLETE.md)** - Full project inventory & details
-
-### 🧪 Testing & Demo
-- **[`PRODUCTION_TESTING_GUIDE.md`](PRODUCTION_TESTING_GUIDE.md)** - Production testing with test data
-- **[`CONSOLE_TESTING_GUIDE.md`](CONSOLE_TESTING_GUIDE.md)** - AWS Console testing for demos
-- **[`DEMO_RECORDING_GUIDE.md`](DEMO_RECORDING_GUIDE.md)** - OBS recording guide
-
-### 📖 Technical Details
-- **[`BEST_PRACTICES.md`](BEST_PRACTICES.md)** - AWS Well-Architected alignment
-- **[`OPTIMIZATION_SUMMARY.md`](OPTIMIZATION_SUMMARY.md)** - Low-code, high-impact optimizations
+```
+schemaguard-ai/
+├── UBUNTU_DEPLOYMENT_MASTER.md    ← Complete deployment guide
+├── README.md                       ← This file
+├── LICENSE                         ← MIT License
+│
+├── terraform/                      ← Infrastructure (11 files)
+│   ├── main.tf
+│   ├── variables.tf
+│   ├── s3.tf, dynamodb.tf, lambda.tf, etc.
+│   └── terraform.tfvars.example
+│
+├── agents/                         ← Agent code (5 files)
+│   ├── schema_analyzer.py
+│   ├── contract_generator.py
+│   ├── etl_patch_agent.py
+│   ├── staging_validator.py
+│   └── requirements.txt
+│
+├── glue/                           ← ETL job
+│   └── etl_job.py
+│
+├── contracts/                      ← Data contracts
+│   └── contract_v1.json
+│
+├── tests/                          ← Test data (8 files)
+│   ├── 01-baseline-single.json
+│   ├── 02-baseline-batch.json
+│   ├── 03-additive-change.json
+│   ├── 04-breaking-change.json
+│   └── ... (4 more test files)
+│
+├── validation/                     ← SQL queries
+│   └── staging_checks.sql
+│
+└── step-functions/                 ← Orchestration
+    └── schemaguard-state-machine.json
+```
 
 ## 🎓 What This Demonstrates
 
