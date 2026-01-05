@@ -55,7 +55,9 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://
 sudo apt update
 sudo apt install terraform -y
 terraform --version
+```
 
+```bash
 # Python & Git
 sudo apt install python3.11 python3-pip git -y
 python3.11 --version
@@ -318,95 +320,35 @@ aws stepfunctions list-executions --state-machine-arn $STATE_MACHINE_ARN --max-r
 
 *Show GitHub repository*
 
-"Hi, I'm [Name]. Today I'm demonstrating SchemaGuard AI - a production-grade agentic AI platform for ETL reliability on AWS.
-
-This solves schema drift in data pipelines using 10+ AWS services: S3, Lambda, Step Functions, DynamoDB, Glue, Bedrock, and Athena.
-
-I've deployed the infrastructure using Terraform. Let me show you how it works."
+"Hi, I'm [Name]. Today I'm demonstrating SchemaGuard AI - a production-grade agentic AI platform for ETL reliability on AWS. This solves schema drift in data pipelines using 10+ AWS services."
 
 **Scene 2: Infrastructure (3 min)**
 
 *Show AWS Console - all resources*
 
-"Here's the deployed infrastructure:
-- 6 S3 buckets for different pipeline stages
-- 4 Lambda functions implementing AI agents
-- 1 Step Functions state machine for orchestration
-- 4 DynamoDB tables for state management
-
-All deployed with a single Terraform command."
+"Here's the deployed infrastructure: 6 S3 buckets, 4 Lambda functions, 1 Step Functions state machine, 4 DynamoDB tables. All deployed with a single Terraform command."
 
 **Scene 3: Test Baseline (4 min)**
 
 *Upload test file in S3 Console*
 
-"Let's test with data matching our contract."
-
-*Show Step Functions execution*
-
-"EventBridge triggered the workflow. Schema Analyzer is running... completed successfully. Change type: NO_CHANGE. Data proceeds to ETL."
-
-*Show CloudWatch logs*
-
-"Here's the detailed analysis. Schema extracted, compared, no differences found."
+"Let's test with data matching our contract. EventBridge triggered the workflow. Schema Analyzer completed successfully. Change type: NO_CHANGE."
 
 **Scene 4: Test Schema Drift (5 min)**
 
 *Upload additive change file*
 
-"Now let's test schema drift. This file has new fields not in our contract."
-
-*Show Step Functions*
-
-"Agent detected the change! Classification: ADDITIVE. New fields: user_location, device_type, browser."
-
-*Show DynamoDB*
-
-"Complete audit trail stored. This requires human approval before processing."
+"Now let's test schema drift. Agent detected the change! Classification: ADDITIVE. New fields detected. Complete audit trail stored."
 
 **Scene 5: Test Breaking Change (3 min)**
 
 *Upload breaking change file*
 
-"Let's test a breaking change - type mismatches."
-
-*Show Step Functions*
-
-"Detected: BREAKING. Type changes in timestamp and user_id."
-
-*Show quarantine bucket*
-
-"Data quarantined. Won't corrupt production. SNS notification sent."
+"Let's test a breaking change. Detected: BREAKING. Data quarantined. Won't corrupt production."
 
 **Scene 6: Wrap Up (3 min)**
 
-*Show architecture diagram*
-
-"SchemaGuard AI demonstrates:
-- Event-driven serverless architecture
-- Agentic AI with governance
-- Production-grade observability
-- Cost optimization
-
-Complete code at github.com/Rishabh1623/schemaguard-ai
-
-Thanks for watching!"
-
-### Recording Tips
-
-✅ **Do:**
-- Speak clearly and slowly
-- Explain WHY, not just WHAT
-- Show business value
-- Navigate confidently
-- Highlight key information
-
-❌ **Don't:**
-- Rush through steps
-- Skip error handling
-- Apologize for mistakes
-- Read everything
-- Forget context
+"SchemaGuard AI demonstrates event-driven serverless architecture, agentic AI with governance, and production-grade observability. Complete code at github.com/Rishabh1623/schemaguard-ai"
 
 ---
 
@@ -504,10 +446,7 @@ terraform destroy
 
 ### Issue: Terraform Apply Fails
 ```bash
-# Check credentials
 aws sts get-caller-identity
-
-# Check region
 aws configure get region
 ```
 
@@ -516,19 +455,12 @@ aws configure get region
 
 ### Issue: Lambda Function Fails
 ```bash
-# Check logs
 aws logs tail /aws/lambda/schemaguard-ai-dev-schema-analyzer --since 1h
-
-# Check IAM role
-aws lambda get-function --function-name schemaguard-ai-dev-schema-analyzer --query 'Configuration.Role'
 ```
 
 ### Issue: Step Functions Not Triggering
 ```bash
-# Check EventBridge rule
 aws events list-rules | grep schemaguard
-
-# Check S3 notifications
 aws s3api get-bucket-notification-configuration --bucket $RAW_BUCKET
 ```
 
@@ -536,14 +468,7 @@ aws s3api get-bucket-notification-configuration --bucket $RAW_BUCKET
 
 ## 💰 COST ESTIMATE
 
-**Development:** $7-12/month
-- S3: $1-2
-- Lambda: $1-2
-- DynamoDB: $1-2
-- Step Functions: $1
-- Bedrock: $2-3
-- Other: $1
-
+**Development:** $7-12/month  
 **Production:** $80-130/month
 
 ---
@@ -556,44 +481,6 @@ You've successfully:
 - ✅ Recorded professional demo
 - ✅ Demonstrated AWS expertise
 
-**This single file had everything you needed!**
-
----
-
-## 📚 WHAT YOU DEMONSTRATED
-
-### Technical Skills
-- Multi-service AWS integration (10+ services)
-- Infrastructure as Code (Terraform)
-- Event-driven serverless architecture
-- Agentic AI implementation
-- Production-grade observability
-- Cost optimization
-- Security best practices
-
-### Business Value
-- Prevents production failures
-- Reduces incident response time
-- Provides governed automation
-- Maintains compliance audit trails
-- Cost-effective solution
-
-### Professional Qualities
-- Production-grade code
-- Comprehensive testing
-- Clear documentation
-- Problem-solving approach
-- Complete system understanding
-
----
-
 **Repository:** https://github.com/Rishabh1623/schemaguard-ai
 
 **This is your AWS Solutions Architect portfolio project!** 🎯
-
----
-
-*Master Guide Version: 1.0*  
-*Everything in ONE file*  
-*Deploy → Test → Record*  
-*Last Updated: December 31, 2025*
