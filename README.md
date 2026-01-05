@@ -6,7 +6,11 @@
 [![Terraform](https://img.shields.io/badge/IaC-Terraform-purple)]()
 [![License](https://img.shields.io/badge/License-MIT-blue)]()
 
-> **🎯 Project Status: 100% COMPLETE ✅ | Ready to Deploy | 45+ Files | 30+ AWS Resources**
+> **Production-grade agentic AI platform for ETL reliability using 10+ AWS services**
+
+## 🚀 Quick Start
+
+**Deploy in 30 minutes:** Follow [`UBUNTU_DEPLOYMENT_MASTER.md`](UBUNTU_DEPLOYMENT_MASTER.md)
 
 ## Overview
 
@@ -209,55 +213,48 @@ This demonstrates real agent design, not just LLM automation.
 
 | Metric | Value |
 |--------|-------|
-| **Total Files** | 45+ |
 | **Lines of Code** | 2,000+ |
 | **AWS Services** | 10+ |
 | **Terraform Resources** | 30+ |
 | **Agent Functions** | 5 |
-| **Documentation Files** | 13 |
 | **Completion** | 100% ✅ |
 
-## 🎓 Learning Outcomes
+## 📚 Essential Documentation
 
-This project demonstrates:
-- ✅ AWS multi-service integration (10+ services)
-- ✅ Infrastructure as Code (Terraform)
-- ✅ Serverless architecture patterns
-- ✅ Event-driven design
-- ✅ Agentic AI implementation
-- ✅ Data engineering pipelines
-- ✅ Production monitoring & observability
+### 🎯 Start Here
+- **[`UBUNTU_DEPLOYMENT_MASTER.md`](UBUNTU_DEPLOYMENT_MASTER.md)** - Complete deployment guide (30-45 min)
+- **[`PROJECT_COMPLETE.md`](PROJECT_COMPLETE.md)** - Full project inventory & details
+
+### 🧪 Testing & Demo
+- **[`PRODUCTION_TESTING_GUIDE.md`](PRODUCTION_TESTING_GUIDE.md)** - Production testing with test data
+- **[`CONSOLE_TESTING_GUIDE.md`](CONSOLE_TESTING_GUIDE.md)** - AWS Console testing for demos
+- **[`DEMO_RECORDING_GUIDE.md`](DEMO_RECORDING_GUIDE.md)** - OBS recording guide
+
+### 📖 Technical Details
+- **[`BEST_PRACTICES.md`](BEST_PRACTICES.md)** - AWS Well-Architected alignment
+- **[`OPTIMIZATION_SUMMARY.md`](OPTIMIZATION_SUMMARY.md)** - Low-code, high-impact optimizations
+
+## 🎓 What This Demonstrates
+
+**Technical Skills:**
+- Multi-service AWS integration (S3, Lambda, Step Functions, DynamoDB, Glue, Bedrock, Athena)
+- Infrastructure as Code (Terraform)
+- Event-driven serverless architecture
+- Agentic AI with governance
+- Production-grade observability
+
+**Business Value:**
+- Prevents schema drift failures before they happen
+- Reduces incident response time from hours to minutes
+- Provides governed automation with human-in-the-loop
+- Complete audit trails for compliance
 
 **Perfect for AWS Solutions Architect portfolio!**
 
-## 📚 Documentation
-
-- `START_DEPLOYMENT.md` - Quick deployment guide
-- `DEPLOYMENT_CHECKLIST.md` - Step-by-step checklist
-- `COMPLETE_DEPLOYMENT_GUIDE.md` - Full AWS CLI guide
-- `PROJECT_COMPLETE.md` - Complete project inventory
-- `PROJECT_READINESS.md` - Readiness assessment
-- `README_UBUNTU.md` - Ubuntu-specific guide
-- `QUICK_COMMANDS.sh` - Bash helper functions
-
-## 📞 Support
-
-For issues or questions:
-1. Check CloudWatch logs
-2. Review deployment guides
-3. Verify AWS credentials
-4. Check service quotas
-
 ## 📄 License
 
-MIT License - See `LICENSE` file
-
-## 👤 Author
-
-Built as a production-grade demonstration of agentic AI architecture for enterprise data platforms.
-
-**Repository:** https://github.com/Rishabh1623/schemaguard-ai
+MIT License - See [`LICENSE`](LICENSE) file
 
 ---
 
-**🎉 Project Status: 100% Complete | Ready to Deploy | Production Grade**
+**🎉 Ready to Deploy | Production Grade | AWS Solutions Architect Portfolio Project**
