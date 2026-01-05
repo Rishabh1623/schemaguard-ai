@@ -1,0 +1,52 @@
+[
+  {
+    "id": "evt-10001",
+    "timestamp": 1704067200000,
+    "event_type": "user_action",
+    "user_id": "user-0001",
+    "data": {
+      "action": "click",
+      "target": "button"
+    }
+  },
+  {
+    "id": "evt-10002",
+    "timestamp": 1704067260000,
+    "event_type": "api_call",
+    "user_id": "user-0002",
+    "data": {
+      "action": "submit",
+      "target": "form"
+    }
+  },
+  {
+    "id": "evt-10003",
+    "timestamp": 1704067320000,
+    "event_type": "user_action",
+    "user_id": "user-0003",
+    "data": {
+      "action": "scroll",
+      "target": "page"
+    }
+  },
+  {
+    "id": "evt-10004",
+    "timestamp": 1704067380000,
+    "event_type": "system_event",
+    "user_id": "user-0004",
+    "data": {
+      "action": "view",
+      "target": "document"
+    }
+  },
+  {
+    "id": "evt-10005",
+    "timestamp": 1704067440000,
+    "event_type": "data_update",
+    "user_id": "user-0005",
+    "data": {
+      "action": "edit",
+      "target": "profile"
+    }
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "id": "evt-breaking-001",
+  "timestamp": "2024-01-01T12:00:00Z",
+  "event_type": "user_action",
+  "user_id": 12345,
+  "data": {
+    "action": "click",
+    "target": "button"
+  }
+}

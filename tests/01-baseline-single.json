@@ -1,0 +1,10 @@
+{
+  "id": "evt-baseline-001",
+  "timestamp": 1704067200000,
+  "event_type": "user_action",
+  "user_id": "user-0042",
+  "data": {
+    "action": "click",
+    "target": "button"
+  }
+}

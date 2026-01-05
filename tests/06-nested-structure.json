@@ -1,0 +1,16 @@
+{
+  "id": "evt-nested-001",
+  "timestamp": 1704067600000,
+  "event_type": "user_action",
+  "user_id": "user-0456",
+  "data": {
+    "action": "submit",
+    "target": "form",
+    "metadata": {
+      "session_id": "sess-7890",
+      "duration": 1234,
+      "success": true,
+      "error_count": 0
+    }
+  }
+}

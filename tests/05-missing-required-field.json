@@ -1,0 +1,9 @@
+{
+  "id": "evt-missing-001",
+  "event_type": "user_action",
+  "user_id": "user-0999",
+  "data": {
+    "action": "click",
+    "target": "button"
+  }
+}

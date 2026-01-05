@@ -1,0 +1,51 @@
+[
+  {
+    "id": "evt-ecom-001",
+    "timestamp": 1704067200000,
+    "event_type": "user_action",
+    "user_id": "user-0101",
+    "data": {
+      "action": "view",
+      "target": "product",
+      "product_id": "prod-5678",
+      "category": "electronics",
+      "price": 299.99
+    }
+  },
+  {
+    "id": "evt-ecom-002",
+    "timestamp": 1704067260000,
+    "event_type": "user_action",
+    "user_id": "user-0101",
+    "data": {
+      "action": "click",
+      "target": "add_to_cart",
+      "product_id": "prod-5678",
+      "quantity": 1
+    }
+  },
+  {
+    "id": "evt-ecom-003",
+    "timestamp": 1704067320000,
+    "event_type": "user_action",
+    "user_id": "user-0101",
+    "data": {
+      "action": "submit",
+      "target": "checkout",
+      "cart_total": 299.99,
+      "payment_method": "credit_card"
+    }
+  },
+  {
+    "id": "evt-ecom-004",
+    "timestamp": 1704067380000,
+    "event_type": "system_event",
+    "user_id": "user-0101",
+    "data": {
+      "action": "process",
+      "target": "payment",
+      "transaction_id": "txn-9876",
+      "status": "success"
+    }
+  }
+]
