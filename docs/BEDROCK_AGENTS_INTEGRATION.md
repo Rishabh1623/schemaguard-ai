@@ -1,51 +1,111 @@
-# 🤖 AWS Bedrock Agents Integration Guide
+# 🤖 AWS Bedrock AgentCore Integration Guide
 
 ## Overview
 
-This guide explains how to enhance SchemaGuard AI with **AWS Bedrock Agents** for true multi-agent collaboration and autonomous decision-making.
+This guide explains how to enhance SchemaGuard AI with **Amazon Bedrock AgentCore** - AWS's newest agentic platform for building, deploying, and operating effective agents at scale.
 
 ---
 
-## 🎯 What are Bedrock Agents?
+## 🎯 What is Amazon Bedrock AgentCore?
 
-**AWS Bedrock Agents** (launched 2024) enable you to build autonomous agents that can:
-- Use tools and APIs
-- Make decisions based on context
-- Collaborate with other agents
-- Maintain conversation history
-- Execute multi-step workflows
+**Amazon Bedrock AgentCore** (launched 2025) is an enterprise-grade agentic platform that provides:
 
-**Key Difference from Direct Bedrock API:**
-- **Current (Direct API):** You call Bedrock, get response, manually orchestrate
-- **Enhanced (Bedrock Agents):** Agent autonomously decides what tools to use, when, and how
+### **Core Capabilities:**
+- ✅ **Intelligent Memory** - Agents remember context across interactions
+- ✅ **Secure Gateway** - Controlled access to tools and data
+- ✅ **Enterprise Security** - Built-in security and compliance
+- ✅ **Dynamic Scaling** - Auto-scales with demand
+- ✅ **Production Monitoring** - Real-time performance tracking
+- ✅ **Framework Agnostic** - Works with any framework and model
+- ✅ **No Infrastructure Management** - Fully managed service
+
+### **Key Difference from Previous Approaches:**
+
+**Traditional (Direct Bedrock API):**
+```
+You call Bedrock → Get response → Manually orchestrate → Manage state
+```
+
+**Bedrock Agents (2024):**
+```
+Agent decides tools → Executes autonomously → Basic memory
+```
+
+**Bedrock AgentCore (2025):** ⭐ NEWEST
+```
+Intelligent Memory + Secure Gateway + Enterprise Security + Dynamic Scaling
++ Production Monitoring + Multi-agent Orchestration
+```
+
+### **Why AgentCore is Game-Changing:**
+
+| Feature | Direct API | Bedrock Agents | **AgentCore (2025)** |
+|---------|-----------|----------------|---------------------|
+| **Memory Management** | Manual | Basic | ✅ Intelligent |
+| **Security Gateway** | Custom | Basic | ✅ Enterprise-grade |
+| **Scaling** | Manual | Auto | ✅ Dynamic |
+| **Monitoring** | CloudWatch | Basic | ✅ Built-in dashboards |
+| **Multi-agent** | Manual | Limited | ✅ Native orchestration |
+| **Production Ready** | Custom | Partial | ✅ Fully managed |
+| **Cost** | Low | Medium | Medium-High |
+| **Innovation** | 2023 | 2024 | ✅ **2025** |
 
 ---
 
-## 🏗️ Proposed Architecture
+## 🏗️ Proposed Architecture with AgentCore
 
 ### Current Architecture:
 ```
 S3 Upload → EventBridge → Step Functions → Lambda (calls Bedrock API) → Decision
 ```
 
-### Enhanced Architecture with Bedrock Agents:
+### Enhanced Architecture with Bedrock AgentCore:
 ```
-S3 Upload → EventBridge → Bedrock Agent Orchestrator
+S3 Upload → EventBridge → AgentCore Gateway
                               ↓
                     ┌─────────┴─────────┐
                     ↓                   ↓
             Schema Detective      Impact Analyst
-            (Specialized Agent)   (Specialized Agent)
+            (AgentCore Agent)    (AgentCore Agent)
                     ↓                   ↓
             ┌───────┴───────┬───────────┴───────┐
             ↓               ↓                   ↓
     Remediation Planner  Cost Estimator  Compliance Checker
-    (Specialized Agent)  (Specialized Agent) (Specialized Agent)
+    (AgentCore Agent)    (AgentCore Agent) (AgentCore Agent)
+                              ↓
+                    AgentCore Memory Store
+                    (Intelligent Context)
 ```
+
+### **AgentCore Components:**
+
+**1. AgentCore Gateway** 🚪
+- Secure entry point for all agent interactions
+- Authentication and authorization
+- Rate limiting and throttling
+- Request/response logging
+
+**2. Intelligent Memory** 🧠
+- Persistent context across sessions
+- Pattern learning from historical data
+- Automatic context retrieval
+- Memory optimization
+
+**3. Agent Orchestrator** 🎭
+- Multi-agent coordination
+- Parallel execution
+- Dependency management
+- Failure recovery
+
+**4. Monitoring Dashboard** 📊
+- Real-time agent performance
+- Cost tracking per agent
+- Quality metrics
+- Anomaly detection
 
 ---
 
-## 🤖 Multi-Agent System Design
+## 🤖 Multi-Agent System Design with AgentCore
 
 ### Agent 1: Schema Detective 🔍
 **Role:** Detect and analyze schema changes
