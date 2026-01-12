@@ -122,7 +122,7 @@
       "Parameters": {
         "TopicArn": "${sns_topic_arn}",
         "Subject": "SchemaGuard: Contract Approval Required",
-        "Message.$": "States.Format('Schema drift detected requiring approval.\\n\\nExecution ID: {}\\nChange Type: {}\\nS3 Location: s3://{}/{}\\n\\nProposed Contract Version: {}\\n\\nPlease review and approve in DynamoDB table.', $.execution_id, $.schema_analysis.result.change_type, $.s3_bucket, $.s3_key, $.contract_proposal.result.contract_version)"
+        "Message.$": "States.Format('Schema drift detected requiring approval.\n\nExecution ID: {}\nChange Type: {}\nS3 Location: s3://{}/{}\n\nProposed Contract Version: {}\n\nPlease review and approve in DynamoDB table.', $.execution_id, $.schema_analysis.result.change_type, $.s3_bucket, $.s3_key, $.contract_proposal.result.contract_version)"
       },
       "ResultPath": "$.notification",
       "Next": "WaitForApproval"
@@ -292,7 +292,7 @@
       "Parameters": {
         "TopicArn": "${sns_topic_arn}",
         "Subject": "SchemaGuard: ETL Execution Successful",
-        "Message.$": "States.Format('ETL execution completed successfully.\\n\\nExecution ID: {}\\nS3 Location: s3://{}/{}\\nChange Type: {}', $.execution_id, $.s3_bucket, $.s3_key, $.schema_analysis.result.change_type)"
+        "Message.$": "States.Format('ETL execution completed successfully.\n\nExecution ID: {}\nS3 Location: s3://{}/{}\nChange Type: {}', $.execution_id, $.s3_bucket, $.s3_key, $.schema_analysis.result.change_type)"
       },
       "End": true
     },
@@ -344,7 +344,7 @@
       "Parameters": {
         "TopicArn": "${sns_topic_arn}",
         "Subject": "SchemaGuard: Data Quarantined",
-        "Message.$": "States.Format('Data has been quarantined due to schema issues.\\n\\nExecution ID: {}\\nS3 Location: s3://{}/{}\\nReason: {}', $.execution_id, $.s3_bucket, $.s3_key, $.quarantine_info.reason)"
+        "Message.$": "States.Format('Data has been quarantined due to schema issues.\n\nExecution ID: {}\nS3 Location: s3://{}/{}\nReason: {}', $.execution_id, $.s3_bucket, $.s3_key, $.quarantine_info.reason)"
       },
       "End": true
     }
