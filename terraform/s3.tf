@@ -28,6 +28,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "raw" {
     id     = "archive-old-data"
     status = "Enabled"
 
+    filter {}
+
     transition {
       days          = 30
       storage_class = "INTELLIGENT_TIERING"
@@ -58,6 +60,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "quarantine" {
   rule {
     id     = "expire-quarantine"
     status = "Enabled"
+
+    filter {}
 
     expiration {
       days = var.quarantine_retention_days
@@ -105,6 +109,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "staging" {
   rule {
     id     = "cleanup-staging"
     status = "Enabled"
+
+    filter {}
 
     expiration {
       days = 7
