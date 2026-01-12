@@ -25,6 +25,11 @@ output "scripts_bucket_name" {
   value       = aws_s3_bucket.scripts.id
 }
 
+output "staging_bucket_name" {
+  description = "S3 bucket for staging/validation"
+  value       = aws_s3_bucket.staging.id
+}
+
 output "glue_job_name" {
   description = "Name of the Glue ETL job"
   value       = aws_glue_job.etl_job.name
