@@ -1,0 +1,9 @@
+{
+  "id": "demo-007",
+  "timestamp": 1704067200000,
+  "event_type": "system_event",
+  "data": {
+    "action": "error",
+    "target": "system"
+  }
+}

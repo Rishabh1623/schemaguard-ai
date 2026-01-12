@@ -1,0 +1,15 @@
+{
+  "id": "demo-009",
+  "timestamp": 1704067200000,
+  "event_type": "order_placed",
+  "user_id": "user-3333",
+  "order_total": 299.99,
+  "currency": "USD",
+  "items_count": 3,
+  "shipping_method": "express",
+  "promo_code": "SAVE20",
+  "data": {
+    "action": "checkout",
+    "target": "cart"
+  }
+}

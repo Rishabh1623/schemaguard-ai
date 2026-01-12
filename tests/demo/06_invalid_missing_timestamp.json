@@ -1,0 +1,9 @@
+{
+  "id": "demo-006",
+  "event_type": "user_action",
+  "user_id": "user-1111",
+  "data": {
+    "action": "click",
+    "target": "link"
+  }
+}

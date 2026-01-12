@@ -1,0 +1,10 @@
+{
+  "id": "demo-001",
+  "timestamp": 1704067200000,
+  "event_type": "user_action",
+  "user_id": "user-1234",
+  "data": {
+    "action": "purchase",
+    "target": "product"
+  }
+}

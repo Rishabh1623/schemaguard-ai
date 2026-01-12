@@ -1,0 +1,10 @@
+{
+  "id": "demo-004",
+  "timestamp": "2024-01-05T10:30:00Z",
+  "event_type": "user_action",
+  "user_id": "user-3456",
+  "data": {
+    "action": "click",
+    "target": "button"
+  }
+}

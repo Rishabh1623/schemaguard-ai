@@ -1,0 +1,11 @@
+{
+  "id": "demo-002",
+  "timestamp": 1704067200000,
+  "event_type": "user_action",
+  "user_id": "user-5678",
+  "payment_method": "credit_card",
+  "data": {
+    "action": "purchase",
+    "target": "product"
+  }
+}

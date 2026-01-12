@@ -1,0 +1,10 @@
+{
+  "id": "demo-005",
+  "timestamp": 1704067200000,
+  "event_type": "user_action",
+  "user_id": 7890,
+  "data": {
+    "action": "search",
+    "target": "product"
+  }
+}

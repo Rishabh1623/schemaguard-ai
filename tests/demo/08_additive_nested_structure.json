@@ -1,0 +1,19 @@
+{
+  "id": "demo-008",
+  "timestamp": 1704067200000,
+  "event_type": "user_action",
+  "user_id": "user-2222",
+  "metadata": {
+    "ip_address": "192.168.1.100",
+    "geo": {
+      "country": "US",
+      "city": "New York",
+      "lat": 40.7128,
+      "lon": -74.006
+    }
+  },
+  "data": {
+    "action": "purchase",
+    "target": "product"
+  }
+}

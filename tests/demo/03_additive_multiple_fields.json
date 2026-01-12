@@ -1,0 +1,12 @@
+{
+  "id": "demo-003",
+  "timestamp": 1704067200000,
+  "event_type": "user_action",
+  "user_id": "user-9012",
+  "device_type": "mobile",
+  "loyalty_points": 500,
+  "data": {
+    "action": "view",
+    "target": "page"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "demo_version": "1.0",
+  "created_at": "2026-01-12T16:56:00.922353",
+  "total_files": 10,
+  "estimated_time_minutes": 10,
+  "scenarios": {
+    "baseline": 1,
+    "additive": 4,
+    "breaking": 2,
+    "invalid": 2,
+    "complex": 1
+  },
+  "files": [
+    {
+      "filename": "01_baseline_perfect_match.json",
+      "description": "\u2705 Perfect match - No schema changes",
+      "expected": "NO_CHANGE \u2192 Process normally"
+    },
+    {
+      "filename": "02_additive_single_field.json",
+      "description": "\u2795 New field added: payment_method",
+      "expected": "ADDITIVE \u2192 Validate and approve"
+    },
+    {
+      "filename": "03_additive_multiple_fields.json",
+      "description": "\u2795\u2795 Multiple new fields: device_type, loyalty_points",
+      "expected": "ADDITIVE \u2192 Validate and approve"
+    },
+    {
+      "filename": "04_breaking_type_change_timestamp.json",
+      "description": "\u274c BREAKING: timestamp changed from number to string",
+      "expected": "BREAKING \u2192 Quarantine and alert"
+    },
+    {
+      "filename": "05_breaking_type_change_user_id.json",
+      "description": "\u274c BREAKING: user_id changed from string to number",
+      "expected": "BREAKING \u2192 Quarantine and alert"
+    },
+    {
+      "filename": "06_invalid_missing_timestamp.json",
+      "description": "\ud83d\udea8 INVALID: Missing required field 'timestamp'",
+      "expected": "INVALID \u2192 Quarantine immediately"
+    },
+    {
+      "filename": "07_invalid_missing_user_id.json",
+      "description": "\ud83d\udea8 INVALID: Missing required field 'user_id'",
+      "expected": "INVALID \u2192 Quarantine immediately"
+    },
+    {
+      "filename": "08_additive_nested_structure.json",
+      "description": "\ud83c\udf33 Nested structure added: metadata with geo info",
+      "expected": "ADDITIVE \u2192 Validate and approve"
+    },
+    {
+      "filename": "09_realistic_ecommerce_order.json",
+      "description": "\ud83d\uded2 Realistic e-commerce order with new fields",
+      "expected": "ADDITIVE \u2192 Validate and approve"
+    },
+    {
+      "filename": "10_multiple_issues.json",
+      "description": "\ud83d\udca5 Multiple issues: type change + missing field",
+      "expected": "BREAKING \u2192 Quarantine and alert"
+    }
+  ]
+}
