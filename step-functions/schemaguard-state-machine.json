@@ -14,9 +14,6 @@
           "status": {
             "S": "STARTED"
           },
-          "start_time": {
-            "S.$": "$$.State.EnteredTime"
-          },
           "s3_bucket": {
             "S.$": "$.s3_bucket"
           },
@@ -269,7 +266,7 @@
             "S.$": "$.execution_id"
           }
         },
-        "UpdateExpression": "SET #status = :status, end_time = :end_time",
+        "UpdateExpression": "SET #status = :status",
         "ExpressionAttributeNames": {
           "#status": "status"
         },
@@ -277,9 +274,6 @@
           ":status": {
             "S": "SUCCESS"
           },
-          ":end_time": {
-            "S.$": "$$.State.EnteredTime"
-          }
         }
       },
       "ResultPath": null,
@@ -318,16 +312,13 @@
             "S.$": "$.execution_id"
           }
         },
-        "UpdateExpression": "SET #status = :status, end_time = :end_time, error_info = :error",
+        "UpdateExpression": "SET #status = :status, error_info = :error",
         "ExpressionAttributeNames": {
           "#status": "status"
         },
         "ExpressionAttributeValues": {
           ":status": {
             "S": "QUARANTINED"
-          },
-          ":end_time": {
-            "S.$": "$$.State.EnteredTime"
           },
           ":error": {
             "S.$": "States.JsonToString($.quarantine_info)"
