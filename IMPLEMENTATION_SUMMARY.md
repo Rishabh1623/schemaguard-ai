@@ -18,22 +18,6 @@
 
 ---
 
-### **2. AWS Bedrock Agents Integration (Multi-Agent System)**
-
-**What Changed:**
-- ✅ Created `docs/BEDROCK_AGENTS_INTEGRATION.md` - Complete implementation guide
-- ✅ Updated README with multi-agent system section
-- ✅ Documented 3 specialized agents:
-  - Schema Detective 🔍
-  - Impact Analyst 📊
-  - Compliance Checker ✅
-
-**Benefits:**
-- 🚀 Cutting-edge: 2024 technology (very few people know this)
-- 🎯 Better accuracy: 98% vs 90%
-- 💡 Explainable AI: Agent-specific reasoning
-- 🔥 Interview impact: HUGE differentiator
-
 ---
 
 ## 📊 Current Project Status
@@ -47,10 +31,10 @@
 - Cost optimized
 
 ✅ **Agent System**
-- 4 Lambda functions (current)
-- Bedrock AI integration
-- Multi-agent design (documented)
+- 4 Lambda functions
+- Direct Bedrock API integration
 - Step Functions orchestration
+- AI-driven impact analysis
 
 ✅ **Testing**
 - 10 demo files covering all scenarios
@@ -61,9 +45,9 @@
 ✅ **Documentation**
 - Complete deployment guide
 - Video recording script
-- Bedrock Agents integration guide
 - Pre-deployment audit
 - Build vs buy analysis
+- Best practices guide
 
 ---
 
@@ -140,10 +124,10 @@ python tests/quick-demo.py
 - Your solution: $120/month
 - **99% cost reduction**
 
-### **3. Multi-Agent System** ✅ ⭐ CUTTING-EDGE
-- Single AI: Standard approach
-- Your project: 3 specialized agents collaborating
-- **2024 technology - very few people know this!**
+### **3. AI-Driven Analysis** ✅
+- Traditional: Rule-based detection
+- Your project: Bedrock AI for intelligent impact analysis
+- Learns patterns and provides recommendations
 
 ### **4. Production Ready** ✅
 - Not a tutorial project
@@ -164,19 +148,19 @@ python tests/quick-demo.py
 
 > "I built SchemaGuard AI, an agentic platform that prevents data pipeline failures using AWS Bedrock and 11 AWS services. The key innovation is it's PROACTIVE—it detects schema changes BEFORE pipelines run, not after they break.
 >
-> What makes it unique is the multi-agent system using AWS Bedrock Agents—one of the newest AWS services from 2024. I have three specialized agents that collaborate: Schema Detective detects changes, Impact Analyst assesses business risk, and Compliance Checker ensures regulatory compliance.
+> The system uses four specialized Lambda agents orchestrated by Step Functions: Schema Analyzer detects changes, Bedrock AI assesses business risk, Contract Generator creates new data contracts, and Staging Validator tests changes before production.
 >
 > I tested it with 10 carefully designed files covering all scenarios—baseline, additive changes, breaking changes, invalid data, and nested structures. Results: 100% detection accuracy, 45-second average processing time, and $0.004 cost per file.
 >
 > The business value: it prevents $50K-500K incidents. At scale (1000 files/day), it costs $120/month and prevents an estimated $4M in losses. That's a 33,000x ROI."
 
-### **When they ask: "Why Bedrock Agents?"**
+### **When they ask: "Why use AI for schema detection?"**
 
-> "Great question! I could have used direct Bedrock API calls, which is what most people do. But I wanted to demonstrate understanding of cutting-edge AI patterns.
+> "Great question! Traditional schema validation uses rigid rule-based systems that can only detect exact matches or predefined patterns. They can't understand context or assess business impact.
 >
-> Bedrock Agents, launched in 2024, enable true autonomous multi-agent systems. Instead of one AI making all decisions, I have specialized agents with specific expertise. The Schema Detective is optimized for pattern recognition, the Impact Analyst focuses on risk assessment, and the Compliance Checker ensures regulatory compliance.
+> By using AWS Bedrock with Claude 3 Sonnet, the system can analyze schema changes intelligently. It understands the semantic meaning of changes—for example, adding a 'payment_method' field is low risk, but changing 'timestamp' from string to number is high risk because it breaks downstream analytics.
 >
-> This gives better accuracy (98% vs 90%), better explainability (you can see which agent made which decision), and demonstrates I stay current with the latest AWS innovations. Very few candidates know about Bedrock Agents yet, so it's a strong differentiator."
+> The AI also provides natural language explanations of the impact, which helps data teams make informed decisions. This approach gives better accuracy and reduces false positives compared to pure rule-based systems."
 
 ### **When they ask: "Did you test at scale?"**
 
@@ -246,9 +230,9 @@ You now have:
 - ✅ Interview-ready talking points
 
 **Your project demonstrates:**
-- Technical depth (11 AWS services, multi-agent AI)
+- Technical depth (11 AWS services, event-driven architecture)
 - Business thinking (ROI, cost optimization)
-- Innovation (2024 technology)
+- AI integration (Bedrock for intelligent analysis)
 - Professionalism (testing, documentation)
 - Practical engineering (cost-conscious decisions)
 

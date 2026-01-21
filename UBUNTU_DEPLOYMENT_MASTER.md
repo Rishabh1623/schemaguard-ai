@@ -10,9 +10,9 @@
 
 **Latest Updates:**
 - ✅ 10-file testing methodology (cost-optimized)
-- ✅ AWS Bedrock AgentCore (2025) integration
 - ✅ AWS Console testing procedures
 - ✅ Quick demo scripts included
+- ✅ Direct Bedrock API integration
 
 ---
 
@@ -343,52 +343,9 @@ read
 
 ---
 
-## ✅ PART 5: UPLOAD INITIAL DATA (3 minutes)
+## ✅ PART 5: PREPARE TEST DATA (2 minutes)
 
-### Step 5.1: Get Bucket Names
-
-```bash
-# Go back to project root
-cd ~/schemaguard-ai
-
-# Get bucket names from Terraform output
-CONTRACTS_BUCKET=$(cd terraform && terraform output -raw contracts_bucket_name)
-RAW_BUCKET=$(cd terraform && terraform output -raw raw_bucket_name)
-SCRIPTS_BUCKET=$(cd terraform && terraform output -raw scripts_bucket_name)
-
-# Verify
-echo "Contracts bucket: $CONTRACTS_BUCKET"
-echo "Raw bucket: $RAW_BUCKET"
-echo "Scripts bucket: $SCRIPTS_BUCKET"
-```
-
-### Step 5.2: Upload Data Contract
-
-```bash
-# Upload initial contract
-aws s3 cp contracts/contract_v1.json s3://$CONTRACTS_BUCKET/contract_v1.json
-
-# Verify upload
-aws s3 ls s3://$CONTRACTS_BUCKET/
-# Should show: contract_v1.json
-```
-
-### Step 5.3: Upload Glue ETL Script
-
-```bash
-# Upload Glue job script
-aws s3 cp glue/etl_job.py s3://$SCRIPTS_BUCKET/glue/etl_job.py
-
-# Verify upload
-aws s3 ls s3://$SCRIPTS_BUCKET/glue/
-# Should show: etl_job.py
-```
-
----
-
-## ✅ PART 6: TEST THE SYSTEM (10 Files - Cost Optimized)
-
-### Step 6.1: Generate Demo Files
+### Step 5.1: Generate Demo Files
 
 ```bash
 # Go back to project root
@@ -409,127 +366,416 @@ python3 tests/quick-demo.py
 
 **Cost:** $0.04 for processing all 10 files
 
-### Step 6.2: Get Bucket Names
+### Step 5.2: Save Bucket Names for Reference
 
 ```bash
 # Get bucket names from Terraform output
-CONTRACTS_BUCKET=$(cd terraform && terraform output -raw contracts_bucket_name)
-RAW_BUCKET=$(cd terraform && terraform output -raw raw_bucket_name)
-SCRIPTS_BUCKET=$(cd terraform && terraform output -raw scripts_bucket_name)
+cd ~/schemaguard-ai/terraform
 
-# Verify
-echo "Contracts bucket: $CONTRACTS_BUCKET"
-echo "Raw bucket: $RAW_BUCKET"
-echo "Scripts bucket: $SCRIPTS_BUCKET"
-```
-
-### Step 6.3: Upload Initial Data
-
-```bash
-# Upload initial contract
-aws s3 cp contracts/contract_v1.json s3://$CONTRACTS_BUCKET/contract_v1.json
-
-# Upload Glue ETL script
-aws s3 cp glue/etl_job.py s3://$SCRIPTS_BUCKET/glue/etl_job.py
-
-# Verify uploads
-aws s3 ls s3://$CONTRACTS_BUCKET/
-aws s3 ls s3://$SCRIPTS_BUCKET/glue/
-```
-
-### Step 6.4: Test Scenario 1 - Baseline (No Changes)
-
-```bash
-# Upload baseline file
-aws s3 cp tests/demo/01_baseline_perfect_match.json \
-  s3://$RAW_BUCKET/data/demo/
-
-echo "✅ File uploaded. Check AWS Console:"
-echo "   Step Functions: https://console.aws.amazon.com/states/"
-echo "   Wait 45 seconds for processing..."
-```
-
-**Expected Result:**
-- Step Functions execution starts
-- Schema Analyzer detects NO_CHANGE
-- File processes normally
-- Data appears in curated bucket
-
-### Step 6.5: Test Scenario 2 - Additive Change (Safe)
-
-```bash
-# Upload file with new field
-aws s3 cp tests/demo/02_additive_single_field.json \
-  s3://$RAW_BUCKET/data/demo/
-
-echo "✅ File uploaded with new 'payment_method' field"
-echo "   Expected: ADDITIVE classification"
-echo "   Wait 45 seconds..."
-```
-
-**Expected Result:**
-- Schema Analyzer detects ADDITIVE change
-- Bedrock AI assesses LOW risk
-- Contract Generator creates v2
-- Staging Validator tests
-- Auto-approved and processed
-
-### Step 6.6: Test Scenario 3 - Breaking Change (Dangerous)
-
-```bash
-# Upload file with type change
-aws s3 cp tests/demo/04_breaking_type_change_timestamp.json \
-  s3://$RAW_BUCKET/data/demo/
-
-echo "🚨 File uploaded with BREAKING change (timestamp type changed)"
-echo "   Expected: QUARANTINE"
-echo "   Wait 45 seconds..."
-```
-
-**Expected Result:**
-- Schema Analyzer detects BREAKING change
-- Bedrock AI assesses HIGH risk
-- Data quarantined immediately
-- SNS alert sent to your email
-- Check quarantine bucket
-
-### Step 6.7: Test Scenario 4 - Invalid Data (Critical)
-
-```bash
-# Upload file with missing required field
-aws s3 cp tests/demo/06_invalid_missing_timestamp.json \
-  s3://$RAW_BUCKET/data/demo/
-
-echo "🚨 File uploaded with INVALID data (missing timestamp)"
-echo "   Expected: IMMEDIATE QUARANTINE"
-echo "   Wait 45 seconds..."
-```
-
-**Expected Result:**
-- Schema Analyzer detects INVALID
-- Immediate quarantine
-- Urgent alert sent
-- No processing attempted
-
-### Step 6.8: Upload All Demo Files (Optional)
-
-```bash
-# Upload all 10 demo files at once
-cd tests/demo
-for file in *.json; do
-  echo "Uploading $file..."
-  aws s3 cp "$file" s3://$RAW_BUCKET/data/demo/
-  sleep 5  # Wait between uploads
-done
-
-echo "✅ All 10 demo files uploaded"
-echo "   Total cost: $0.04"
-echo "   Processing time: ~7-8 minutes"
+echo "=== Save These Bucket Names ==="
+echo ""
+echo "CONTRACTS_BUCKET: $(terraform output -raw contracts_bucket_name)"
+echo "RAW_BUCKET: $(terraform output -raw raw_bucket_name)"
+echo "STAGING_BUCKET: $(terraform output -raw staging_bucket_name)"
+echo "CURATED_BUCKET: $(terraform output -raw curated_bucket_name)"
+echo "QUARANTINE_BUCKET: $(terraform output -raw quarantine_bucket_name)"
+echo "SCRIPTS_BUCKET: $(terraform output -raw scripts_bucket_name)"
+echo ""
+echo "Copy these names - you'll need them for AWS Console testing"
 ```
 
 ---
 
-## ✅ PART 7: MONITOR IN AWS CONSOLE
+## ✅ PART 6: TEST IN AWS CONSOLE (Perfect for Demo Video)
+
+**🎬 This section is designed for recording demo videos!**
+
+### Step 6.1: Upload Initial Files via AWS Console
+
+**1. Open S3 Console:**
+```
+https://s3.console.aws.amazon.com/s3/buckets
+```
+
+**2. Upload Data Contract:**
+- Click on your **contracts bucket** (schemaguard-ai-dev-contracts-...)
+- Click "Upload"
+- Click "Add files"
+- Select `contracts/contract_v1.json` from your local machine
+- Click "Upload"
+- ✅ Verify file appears in bucket
+
+**3. Upload Glue Script:**
+- Click on your **scripts bucket** (schemaguard-ai-dev-scripts-...)
+- Click "Create folder" → Name it `glue` → Create
+- Click on `glue/` folder
+- Click "Upload"
+- Select `glue/etl_job.py` from your local machine
+- Click "Upload"
+- ✅ Verify file appears in glue/ folder
+
+### Step 6.2: Open Monitoring Tabs (Before Testing)
+
+**Open these AWS Console tabs in your browser:**
+
+**Tab 1: Step Functions (Main monitoring)**
+```
+https://console.aws.amazon.com/states/home?region=us-east-1
+```
+- Click on `schemaguard-ai-dev-orchestrator` state machine
+- Keep "Executions" tab open
+- You'll see executions appear here in real-time
+
+**Tab 2: S3 Raw Bucket (Upload files here)**
+```
+https://s3.console.aws.amazon.com/s3/buckets
+```
+- Click on your **raw bucket** (schemaguard-ai-dev-raw-...)
+- Navigate to or create folder: `data/demo/`
+- Keep this tab open for uploading test files
+
+**Tab 3: S3 Curated Bucket (Successful processing)**
+```
+https://s3.console.aws.amazon.com/s3/buckets
+```
+- Click on your **curated bucket** (schemaguard-ai-dev-curated-...)
+- Navigate to `data/` folder
+- Refresh to see processed files appear
+
+**Tab 4: S3 Quarantine Bucket (Failed/risky data)**
+```
+https://s3.console.aws.amazon.com/s3/buckets
+```
+- Click on your **quarantine bucket** (schemaguard-ai-dev-quarantine-...)
+- Refresh to see quarantined files
+
+**Tab 5: DynamoDB Schema History**
+```
+https://console.aws.amazon.com/dynamodbv2/home?region=us-east-1#tables
+```
+- Click on `schemaguard-ai-dev-schema-history` table
+- Click "Explore table items"
+- See schema change records appear
+
+**Tab 6: CloudWatch Logs (Detailed logs)**
+```
+https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups
+```
+- Find `/aws/lambda/schemaguard-ai-dev-schema-analyzer`
+- Click to see detailed execution logs
+
+### Step 6.3: Test Scenario 1 - Baseline (No Changes)
+
+**🎬 Perfect for starting your demo video!**
+
+**1. Upload File via S3 Console:**
+- Go to your **raw bucket** → `data/demo/` folder
+- Click "Upload"
+- Select `tests/demo/01_baseline_perfect_match.json`
+- Click "Upload"
+
+**2. Watch Processing (45 seconds):**
+- Switch to **Step Functions** tab
+- Click "Refresh" - new execution appears!
+- Click on the execution to see visual workflow
+- Watch each step turn green:
+  - ✅ Schema Analyzer
+  - ✅ Bedrock Impact Analysis
+  - ✅ Contract Generator
+  - ✅ Staging Validator
+  - ✅ Production Controller
+
+**3. Verify Results:**
+- Go to **Curated bucket** → `data/` folder
+- Refresh - file appears! ✅
+- Go to **DynamoDB** → Schema History table
+- See record: `change_type: NO_CHANGE`
+
+**Expected Result:**
+- ✅ Step Functions execution: SUCCESS
+- ✅ Classification: NO_CHANGE
+- ✅ File in curated bucket
+- ✅ Processing time: ~45 seconds
+
+### Step 6.4: Test Scenario 2 - Additive Change (Safe)
+
+**🎬 Shows AI detecting safe changes!**
+
+**1. Upload File:**
+- Go to **raw bucket** → `data/demo/`
+- Upload `tests/demo/02_additive_single_field.json`
+- This file has a NEW field: `payment_method`
+
+**2. Watch Step Functions:**
+- New execution starts
+- Schema Analyzer detects: **ADDITIVE**
+- Bedrock AI analyzes: **LOW RISK**
+- Contract Generator creates v2
+- Staging Validator tests
+- Auto-approved! ✅
+
+**3. Verify Results:**
+- **Curated bucket**: File processed successfully
+- **DynamoDB**: Record shows `change_type: ADDITIVE`
+- **CloudWatch Logs**: See Bedrock AI analysis
+
+**Expected Result:**
+- ✅ Classification: ADDITIVE
+- ✅ Risk: LOW
+- ✅ Action: Auto-approved and processed
+- ✅ New contract version created
+
+### Step 6.5: Test Scenario 3 - Breaking Change (Dangerous)
+
+**🎬 Shows AI preventing data corruption!**
+
+**1. Upload File:**
+- Go to **raw bucket** → `data/demo/`
+- Upload `tests/demo/04_breaking_type_change_timestamp.json`
+- This file has `timestamp` changed from STRING to NUMBER
+
+**2. Watch Step Functions:**
+- New execution starts
+- Schema Analyzer detects: **BREAKING** 🚨
+- Bedrock AI analyzes: **HIGH RISK**
+- Immediate quarantine decision
+- No processing attempted
+
+**3. Verify Results:**
+- **Quarantine bucket**: File appears here! 🚨
+- **Curated bucket**: No file (correctly blocked)
+- **DynamoDB**: Record shows `change_type: BREAKING`
+- **Email**: Check for SNS alert notification
+
+**Expected Result:**
+- ✅ Classification: BREAKING
+- ✅ Risk: HIGH
+- ✅ Action: QUARANTINED
+- ✅ Alert sent to your email
+- ✅ Data protected from corruption
+
+### Step 6.6: Test Scenario 4 - Invalid Data (Critical)
+
+**🎬 Shows data quality enforcement!**
+
+**1. Upload File:**
+- Go to **raw bucket** → `data/demo/`
+- Upload `tests/demo/06_invalid_missing_timestamp.json`
+- This file is MISSING required field: `timestamp`
+
+**2. Watch Step Functions:**
+- New execution starts
+- Schema Analyzer detects: **INVALID** 🚨
+- Immediate quarantine (no AI analysis needed)
+- Critical alert triggered
+
+**3. Verify Results:**
+- **Quarantine bucket**: File quarantined immediately
+- **DynamoDB**: Record shows `change_type: INVALID`
+- **Email**: Urgent alert received
+
+**Expected Result:**
+- ✅ Classification: INVALID
+- ✅ Action: IMMEDIATE QUARANTINE
+- ✅ No processing attempted
+- ✅ Urgent alert sent
+
+### Step 6.7: View Complete Results
+
+**After testing all scenarios, check:**
+
+**1. S3 Buckets Summary:**
+```
+Raw bucket (data/demo/):        4 files uploaded
+Curated bucket (data/):         2 files (baseline + additive)
+Quarantine bucket:              2 files (breaking + invalid)
+```
+
+**2. DynamoDB Schema History:**
+- 4 records total
+- 1 NO_CHANGE
+- 1 ADDITIVE
+- 1 BREAKING
+- 1 INVALID
+
+**3. Step Functions Executions:**
+- 4 executions total
+- All completed successfully
+- Visual workflow for each
+
+**4. Cost:**
+- Total: $0.016 (4 files × $0.004)
+- Bedrock API: $0.012
+- Other services: $0.004
+
+---
+
+## ✅ PART 7: TEST WITH AWS CLI (Professional Automation)
+
+**💡 This section shows technical depth and automation skills!**
+
+### Step 7.1: Set Environment Variables
+
+```bash
+# Go to project root
+cd ~/schemaguard-ai
+
+# Export bucket names
+export CONTRACTS_BUCKET=$(cd terraform && terraform output -raw contracts_bucket_name)
+export RAW_BUCKET=$(cd terraform && terraform output -raw raw_bucket_name)
+export STAGING_BUCKET=$(cd terraform && terraform output -raw staging_bucket_name)
+export CURATED_BUCKET=$(cd terraform && terraform output -raw curated_bucket_name)
+export QUARANTINE_BUCKET=$(cd terraform && terraform output -raw quarantine_bucket_name)
+export SCRIPTS_BUCKET=$(cd terraform && terraform output -raw scripts_bucket_name)
+
+# Verify
+echo "✅ Environment variables set:"
+echo "RAW_BUCKET: $RAW_BUCKET"
+echo "CURATED_BUCKET: $CURATED_BUCKET"
+echo "QUARANTINE_BUCKET: $QUARANTINE_BUCKET"
+```
+
+### Step 7.2: Upload Initial Data (CLI)
+
+```bash
+# Upload data contract
+aws s3 cp contracts/contract_v1.json s3://$CONTRACTS_BUCKET/contract_v1.json
+
+# Upload Glue script
+aws s3 cp glue/etl_job.py s3://$SCRIPTS_BUCKET/glue/etl_job.py
+
+# Verify uploads
+echo "=== Verifying Uploads ==="
+aws s3 ls s3://$CONTRACTS_BUCKET/
+aws s3 ls s3://$SCRIPTS_BUCKET/glue/
+```
+
+### Step 7.3: Test All Scenarios (CLI)
+
+```bash
+# Test 1: Baseline (No Changes)
+echo "📤 Uploading baseline file..."
+aws s3 cp tests/demo/01_baseline_perfect_match.json \
+  s3://$RAW_BUCKET/data/demo/01_baseline_perfect_match.json
+echo "⏳ Wait 45 seconds for processing..."
+sleep 45
+
+# Test 2: Additive Change (Safe)
+echo "📤 Uploading additive change file..."
+aws s3 cp tests/demo/02_additive_single_field.json \
+  s3://$RAW_BUCKET/data/demo/02_additive_single_field.json
+echo "⏳ Wait 45 seconds..."
+sleep 45
+
+# Test 3: Breaking Change (Dangerous)
+echo "📤 Uploading breaking change file..."
+aws s3 cp tests/demo/04_breaking_type_change_timestamp.json \
+  s3://$RAW_BUCKET/data/demo/04_breaking_type_change_timestamp.json
+echo "⏳ Wait 45 seconds..."
+sleep 45
+
+# Test 4: Invalid Data (Critical)
+echo "📤 Uploading invalid data file..."
+aws s3 cp tests/demo/06_invalid_missing_timestamp.json \
+  s3://$RAW_BUCKET/data/demo/06_invalid_missing_timestamp.json
+echo "⏳ Wait 45 seconds..."
+sleep 45
+
+echo "✅ All test files uploaded!"
+```
+
+### Step 7.4: Verify Results (CLI)
+
+```bash
+# Check curated bucket (successful processing)
+echo "=== Curated Bucket (Successful) ==="
+aws s3 ls s3://$CURATED_BUCKET/data/ --recursive
+# Expected: 2 files (baseline + additive)
+
+# Check quarantine bucket (failed/risky)
+echo "=== Quarantine Bucket (Failed/Risky) ==="
+aws s3 ls s3://$QUARANTINE_BUCKET/ --recursive
+# Expected: 2 files (breaking + invalid)
+
+# Count files
+echo "=== File Count Summary ==="
+echo "Curated: $(aws s3 ls s3://$CURATED_BUCKET/data/ --recursive | wc -l) files"
+echo "Quarantined: $(aws s3 ls s3://$QUARANTINE_BUCKET/ --recursive | wc -l) files"
+```
+
+### Step 7.5: Check DynamoDB Records (CLI)
+
+```bash
+# Get schema history records
+echo "=== Schema History Records ==="
+aws dynamodb scan \
+  --table-name schemaguard-ai-dev-schema-history \
+  --max-items 10 \
+  --query 'Items[*].[change_type.S, file_name.S, timestamp.N]' \
+  --output table
+
+# Expected output:
+# NO_CHANGE    | 01_baseline_perfect_match.json
+# ADDITIVE     | 02_additive_single_field.json
+# BREAKING     | 04_breaking_type_change_timestamp.json
+# INVALID      | 06_invalid_missing_timestamp.json
+```
+
+### Step 7.6: Check Step Functions Executions (CLI)
+
+```bash
+# Get state machine ARN
+STATE_MACHINE_ARN=$(cd terraform && terraform output -raw state_machine_arn)
+
+# List recent executions
+echo "=== Recent Step Functions Executions ==="
+aws stepfunctions list-executions \
+  --state-machine-arn $STATE_MACHINE_ARN \
+  --max-results 10 \
+  --query 'executions[*].[name, status, startDate]' \
+  --output table
+
+# Expected: 4 executions, all SUCCEEDED
+```
+
+### Step 7.7: View CloudWatch Logs (CLI)
+
+```bash
+# View Schema Analyzer logs (last 50 lines)
+echo "=== Schema Analyzer Logs ==="
+aws logs tail /aws/lambda/schemaguard-ai-dev-schema-analyzer \
+  --since 1h \
+  --format short
+
+# View Contract Generator logs
+echo "=== Contract Generator Logs ==="
+aws logs tail /aws/lambda/schemaguard-ai-dev-contract-generator \
+  --since 1h \
+  --format short
+```
+
+### Step 7.8: Batch Upload All Demo Files (CLI)
+
+```bash
+# Upload all 10 demo files at once
+echo "📤 Uploading all 10 demo files..."
+cd ~/schemaguard-ai/tests/demo
+
+for file in *.json; do
+  echo "Uploading: $file"
+  aws s3 cp "$file" s3://$RAW_BUCKET/data/demo/
+  sleep 5  # Wait between uploads to avoid overwhelming
+done
+
+echo "✅ All 10 files uploaded!"
+echo "⏳ Wait 8-10 minutes for all processing to complete..."
+echo ""
+echo "Monitor at: https://console.aws.amazon.com/states/"
+```
+
+---
+
+## ✅ PART 8: MONITOR IN AWS CONSOLE
 
 ### Step 7.1: Step Functions Console
 
@@ -654,7 +900,49 @@ echo "Total: ~\$0.04"
 
 ---
 
-## ✅ PART 8: MONITORING & TROUBLESHOOTING
+## ✅ PART 8: MONITOR IN AWS CONSOLE
+
+### Monitoring Dashboard URLs
+
+**Open these in your browser for complete visibility:**
+
+```bash
+# Print all monitoring URLs
+echo "=== AWS Console Monitoring URLs ==="
+echo ""
+echo "Step Functions:"
+echo "https://console.aws.amazon.com/states/home?region=us-east-1"
+echo ""
+echo "S3 Buckets:"
+echo "https://s3.console.aws.amazon.com/s3/buckets"
+echo ""
+echo "DynamoDB Tables:"
+echo "https://console.aws.amazon.com/dynamodbv2/home?region=us-east-1#tables"
+echo ""
+echo "CloudWatch Logs:"
+echo "https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups"
+echo ""
+echo "Lambda Functions:"
+echo "https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions"
+```
+
+### Real-Time Monitoring Tips
+
+**For Demo Videos:**
+1. Keep Step Functions tab open - shows visual workflow
+2. Keep S3 curated/quarantine tabs open - see files appear
+3. Refresh DynamoDB table - see records added
+4. CloudWatch Logs - show detailed AI analysis
+
+**For Troubleshooting:**
+1. Check CloudWatch Logs first
+2. Verify Step Functions execution details
+3. Check DynamoDB for state
+4. Review S3 bucket contents
+
+---
+
+## ✅ PART 9: VERIFY RESULTS
 
 ### Monitor CloudWatch Logs
 
@@ -897,52 +1185,6 @@ You've successfully deployed SchemaGuard AI on AWS!
 - Monitor costs and optimize
 - Explore Bedrock AgentCore integration
 - Document your learnings
-
----
-
-## 🤖 BONUS: AWS Bedrock AgentCore Integration
-
-SchemaGuard is designed to leverage **Amazon Bedrock AgentCore** (2025) for advanced multi-agent collaboration.
-
-### What is AgentCore?
-
-Amazon Bedrock AgentCore is AWS's newest agentic platform providing:
-- ✅ **Intelligent Memory** - Agents learn from historical patterns
-- ✅ **Secure Gateway** - Enterprise-grade access control
-- ✅ **Dynamic Scaling** - Auto-scales with demand
-- ✅ **Production Monitoring** - Built-in dashboards
-- ✅ **Multi-agent Orchestration** - Native agent collaboration
-
-### Multi-Agent System
-
-**Agent 1: Schema Detective 🔍**
-- Detects and classifies schema changes
-- Learns from historical patterns
-- 98% accuracy
-
-**Agent 2: Impact Analyst 📊**
-- Analyzes business impact
-- Remembers past incidents
-- Estimates cost of failures
-
-**Agent 3: Compliance Checker ✅**
-- Ensures regulatory compliance
-- Tracks compliance history
-- GDPR, HIPAA, SOC2 validation
-
-### Implementation
-
-See [`docs/BEDROCK_AGENTS_INTEGRATION.md`](docs/BEDROCK_AGENTS_INTEGRATION.md) for:
-- Complete AgentCore architecture
-- Terraform configuration
-- Agent definitions
-- Cost comparison
-- Implementation guide
-
-**Cost with AgentCore:**
-- 10 files: $0.15 (vs $0.04 current)
-- Additional $0.11 for intelligent memory + enterprise features
-- 98% accuracy vs 85% with direct API
 
 ---
 
