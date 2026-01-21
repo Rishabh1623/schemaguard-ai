@@ -15,7 +15,7 @@
             "S": "STARTED"
           },
           "start_time": {
-            "N.$": "$$.State.EnteredTime"
+            "S.$": "$$.State.EnteredTime"
           },
           "s3_bucket": {
             "S.$": "$.s3_bucket"
@@ -278,7 +278,7 @@
             "S": "SUCCESS"
           },
           ":end_time": {
-            "N.$": "$$.State.EnteredTime"
+            "S.$": "$$.State.EnteredTime"
           }
         }
       },
@@ -327,7 +327,7 @@
             "S": "QUARANTINED"
           },
           ":end_time": {
-            "N.$": "$$.State.EnteredTime"
+            "S.$": "$$.State.EnteredTime"
           },
           ":error": {
             "S.$": "States.JsonToString($.quarantine_info)"
