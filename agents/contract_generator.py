@@ -38,11 +38,12 @@ def lambda_handler(event, context):
         )
         
         # Store for approval
-        approval_id = store_for_approval(execution_id, new_contract)
+        contract_id = store_for_approval(execution_id, new_contract)
         
         return {
             'execution_id': execution_id,
-            'approval_id': approval_id,
+            'contract_id': contract_id,
+            'contract_version': new_version,
             'new_contract': new_contract,
             'requires_approval': True,
             'timestamp': datetime.utcnow().isoformat()
@@ -88,18 +89,17 @@ def generate_contract(current: Dict, incoming_schema: Dict, diff: Dict, version:
 def store_for_approval(execution_id: str, contract: Dict) -> str:
     """Store contract for human approval"""
     table = dynamodb.Table(CONTRACT_APPROVALS_TABLE)
-    approval_id = f"approval-{execution_id}"
+    contract_id = f"contract-{execution_id}"
     timestamp = int(datetime.utcnow().timestamp() * 1000)
     
     table.put_item(Item={
-        'approval_id': approval_id,
-        'timestamp': timestamp,
+        'contract_id': contract_id,
+        'version': contract['version'],
         'execution_id': execution_id,
-        'contract_version': contract['version'],
         'contract_data': json.dumps(contract),
-        'status': 'PENDING',
+        'approval_status': 'PENDING',
         'created_at': datetime.utcnow().isoformat(),
         'expiration_time': timestamp + (30 * 24 * 60 * 60)  # 30 days
     })
     
-    return approval_id
+    return contract_id
