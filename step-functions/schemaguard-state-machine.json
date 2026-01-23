@@ -203,7 +203,7 @@
           "--EXECUTION_MODE": "STAGING",
           "--EXECUTION_ID.$": "$.execution_id",
           "--S3_INPUT_PATH.$": "States.Format('s3://{}/{}', $.s3_bucket, $.s3_key)",
-          "--CONTRACT_VERSION.$": "$.contract_proposal.result.contract_version"
+          "--CONTRACT_VERSION.$": "States.Format('{}', $.schema_analysis.result.current_contract.version)"
         }
       },
       "ResultPath": "$.staging_execution",
