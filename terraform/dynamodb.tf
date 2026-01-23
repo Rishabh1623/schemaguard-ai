@@ -144,23 +144,6 @@ resource "aws_dynamodb_table" "execution_state" {
     type = "S"
   }
 
-  attribute {
-    name = "status"
-    type = "S"
-  }
-
-  attribute {
-    name = "start_time"
-    type = "N"
-  }
-
-  global_secondary_index {
-    name            = "StatusIndex"
-    hash_key        = "status"
-    range_key       = "start_time"
-    projection_type = "ALL"
-  }
-
   point_in_time_recovery {
     enabled = var.enable_point_in_time_recovery
   }
