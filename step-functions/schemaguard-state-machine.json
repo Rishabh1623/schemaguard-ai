@@ -273,7 +273,7 @@
         "ExpressionAttributeValues": {
           ":status": {
             "S": "SUCCESS"
-          },
+          }
         }
       },
       "ResultPath": null,
