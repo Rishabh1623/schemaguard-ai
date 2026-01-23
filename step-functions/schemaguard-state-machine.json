@@ -224,7 +224,7 @@
         "FunctionName": "${staging_validator_arn}",
         "Payload": {
           "execution_id.$": "$.execution_id",
-          "glue_job_run_id.$": "$.staging_execution.JobRunId",
+          "glue_job_run_id.$": "$.staging_execution.Id",
           "expected_schema.$": "$.schema_analysis.result.incoming_schema"
         }
       },
