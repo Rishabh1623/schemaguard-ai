@@ -101,6 +101,7 @@
         "FunctionName": "${contract_generator_arn}",
         "Payload": {
           "execution_id.$": "$.execution_id",
+          "incoming_schema.$": "$.schema_analysis.result.incoming_schema",
           "schema_diff.$": "$.schema_analysis.result.schema_diff",
           "current_contract.$": "$.schema_analysis.result.current_contract",
           "change_type.$": "$.schema_analysis.result.change_type"
