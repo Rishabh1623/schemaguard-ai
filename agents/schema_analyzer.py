@@ -49,7 +49,10 @@ def lambda_handler(event, context):
         store_schema_history(execution_id, incoming_schema, expected_schema, schema_diff, change_type, impact_analysis)
         
         # Check agent memory
-        auto_approve = check_agent_memory(schema_diff, change_type)
+        memory_approved = check_agent_memory(schema_diff, change_type)
+        
+        # Auto-approve if: agent memory says yes OR Bedrock says it's safe
+        auto_approve = memory_approved or impact_analysis.get('safe_to_auto_approve', False)
         
         return {
             'execution_id': execution_id,
