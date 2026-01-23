@@ -222,7 +222,8 @@ resource "aws_iam_role_policy" "lambda_agent" {
           "${aws_s3_bucket.raw.arn}/*",
           "${aws_s3_bucket.contracts.arn}/*",
           "${aws_s3_bucket.staging.arn}/*",
-          "${aws_s3_bucket.quarantine.arn}/*"
+          "${aws_s3_bucket.quarantine.arn}/*",
+          "${aws_s3_bucket.scripts.arn}/*"
         ]
       },
       {
@@ -234,7 +235,8 @@ resource "aws_iam_role_policy" "lambda_agent" {
           aws_s3_bucket.raw.arn,
           aws_s3_bucket.contracts.arn,
           aws_s3_bucket.staging.arn,
-          aws_s3_bucket.quarantine.arn
+          aws_s3_bucket.quarantine.arn,
+          aws_s3_bucket.scripts.arn
         ]
       },
       {
