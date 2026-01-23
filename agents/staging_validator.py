@@ -43,10 +43,13 @@ def lambda_handler(event, context):
             if isinstance(check, dict)
         )
         
-        validation_results['overall_status'] = 'PASSED' if all_passed else 'FAILED'
-        validation_results['timestamp'] = datetime.utcnow().isoformat()
-        
-        return validation_results
+        return {
+            'execution_id': execution_id,
+            'validation_passed': all_passed,
+            'overall_status': 'PASSED' if all_passed else 'FAILED',
+            'checks': validation_results,
+            'timestamp': datetime.utcnow().isoformat()
+        }
         
     except Exception as e:
         print(f"Error: {str(e)}")
