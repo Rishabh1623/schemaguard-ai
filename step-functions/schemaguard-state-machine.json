@@ -145,29 +145,25 @@
       "Type": "Choice",
       "Choices": [
         {
-          "And": [
-            {
-              "Variable": "$.approval_check.Item.approval_status",
-              "IsPresent": true
-            },
-            {
-              "Variable": "$.approval_check.Item.approval_status.S",
-              "StringEquals": "APPROVED"
-            }
-          ],
+          "Variable": "$.approval_check.Item.approval_status.S",
+          "IsPresent": true,
+          "Next": "EvaluateApprovalDecision"
+        }
+      ],
+      "Default": "WaitForApprovalDelay"
+    },
+
+    "EvaluateApprovalDecision": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.approval_check.Item.approval_status.S",
+          "StringEquals": "APPROVED",
           "Next": "ProposeETLPatch"
         },
         {
-          "And": [
-            {
-              "Variable": "$.approval_check.Item.approval_status",
-              "IsPresent": true
-            },
-            {
-              "Variable": "$.approval_check.Item.approval_status.S",
-              "StringEquals": "REJECTED"
-            }
-          ],
+          "Variable": "$.approval_check.Item.approval_status.S",
+          "StringEquals": "REJECTED",
           "Next": "QuarantineData"
         }
       ],
