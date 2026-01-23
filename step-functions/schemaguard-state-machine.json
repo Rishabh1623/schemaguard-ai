@@ -309,8 +309,7 @@
       "Parameters": {
         "execution_id.$": "$.execution_id",
         "reason": "Schema validation failed or breaking change detected",
-        "validation_result.$": "$.validation_result",
-        "error_info": "Validation checks failed"
+        "error_info.$": "States.JsonToString($)"
       },
       "ResultPath": "$.quarantine_info",
       "Next": "RecordFailure"
