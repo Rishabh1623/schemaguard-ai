@@ -184,6 +184,7 @@
         "Payload": {
           "execution_id.$": "$.execution_id",
           "schema_diff.$": "$.schema_analysis.result.schema_diff",
+          "change_type.$": "$.schema_analysis.result.change_type",
           "contract_version.$": "$.contract_proposal.result.contract_version"
         }
       },
