@@ -228,6 +228,18 @@ resource "aws_iam_role_policy" "lambda_agent" {
       {
         Effect = "Allow"
         Action = [
+          "s3:ListBucket"
+        ]
+        Resource = [
+          aws_s3_bucket.raw.arn,
+          aws_s3_bucket.contracts.arn,
+          aws_s3_bucket.staging.arn,
+          aws_s3_bucket.quarantine.arn
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "dynamodb:GetItem",
           "dynamodb:PutItem",
           "dynamodb:UpdateItem",
