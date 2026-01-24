@@ -1,9 +1,0 @@
-{
-  "id": "demo-010",
-  "timestamp": "invalid-timestamp",
-  "event_type": "user_action",
-  "data": {
-    "action": "error",
-    "target": "unknown"
-  }
-}
