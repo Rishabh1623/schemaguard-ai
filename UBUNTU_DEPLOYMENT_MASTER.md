@@ -409,9 +409,9 @@ ls -la
 
 ---
 
-## ✅ PART 6: TEST IN AWS CONSOLE (Perfect for Demo Video)
+## ✅ PART 6: TEST IN AWS CONSOLE
 
-**🎬 This section is designed for recording demo videos!**
+**This section demonstrates manual testing and validation using AWS Console.**
 
 ### Step 6.1: Open Monitoring Tabs (Before Testing)
 
@@ -465,8 +465,6 @@ https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-group
 
 ### Step 6.2: Test Scenario 1 - Baseline (No Changes)
 
-**🎬 Perfect for starting your demo video!**
-
 **1. Upload File via S3 Console:**
 - Go to your **raw bucket** → `data/demo/` folder
 - Click "Upload"
@@ -498,8 +496,6 @@ https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-group
 
 ### Step 6.3: Test Scenario 2 - Additive Change (Safe)
 
-**🎬 Shows AI detecting safe changes!**
-
 **1. Upload File:**
 - Go to **raw bucket** → `data/demo/`
 - Upload `tests/demo/02_additive_single_field.json`
@@ -525,8 +521,6 @@ https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-group
 - ✅ New contract version created
 
 ### Step 6.4: Test Scenario 3 - Breaking Change (Dangerous)
-
-**🎬 Shows AI preventing data corruption!**
 
 **1. Upload File:**
 - Go to **raw bucket** → `data/demo/`
@@ -554,8 +548,6 @@ https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-group
 - ✅ Data protected from corruption
 
 ### Step 6.5: Test Scenario 4 - Invalid Data (Critical)
-
-**🎬 Shows data quality enforcement!**
 
 **1. Upload File:**
 - Go to **raw bucket** → `data/demo/`
@@ -765,15 +757,15 @@ echo "Lambda Functions:"
 echo "https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions"
 ```
 
-### Step 8.2: Real-Time Monitoring Tips
+### Step 8.2: Real-Time Monitoring Best Practices
 
-**For Demo Videos:**
+**Monitoring Recommendations:**
 1. Keep Step Functions tab open - shows visual workflow
 2. Keep S3 curated/quarantine tabs open - see files appear
 3. Refresh DynamoDB table - see records added
 4. CloudWatch Logs - show detailed AI analysis
 
-**For Troubleshooting:**
+**Troubleshooting Approach:**
 1. Check CloudWatch Logs first
 2. Verify Step Functions execution details
 3. Check DynamoDB for state
