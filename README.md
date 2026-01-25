@@ -70,7 +70,7 @@ Instead of treating schema drift as a **failure event**, SchemaGuard AI treats i
 
 ### Solution Architecture
 
-![SchemaGuard AI Architecture](Architecture%20Diagram.png)
+![SchemaGuard AI Architecture](Untitled%20Diagram-Page-2.drawio%20(1).png)
 
 **Architecture Overview:**
 
