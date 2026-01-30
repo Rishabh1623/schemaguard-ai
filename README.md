@@ -112,6 +112,13 @@ Instead of treating schema drift as a **failure event**, SchemaGuard AI treats i
 ![CloudWatch Logs](screenshots/CloudWatch.png)
 *Complete observability with logs, metrics, and audit trails for all system components*
 
+### Email Notifications
+![Email Notification 1](screenshots/email-notification-1.png)
+*Real-time SNS email alerts for schema changes with detailed risk assessment and recommendations*
+
+![Email Notification 2](screenshots/email-notification-2.png)
+*Automated notifications showing change type, affected fields, and required actions*
+
 ### Execution Results
 ![Execution Results](screenshots/execution-results.png)
 *End-to-end processing results showing automated decision-making and data routing*
