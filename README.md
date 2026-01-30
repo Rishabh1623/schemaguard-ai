@@ -72,49 +72,6 @@ Instead of treating schema drift as a **failure event**, SchemaGuard AI treats i
 
 ![SchemaGuard AI Architecture](Untitled%20Diagram-Page-2.drawio%20(1).png)
 
-**Architecture Overview:**
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Data Ingestion Layer                      │
-│  Mobile Apps / APIs / Microservices → S3 Raw Bucket             │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                     Event Detection Layer                        │
-│  EventBridge → Triggers on S3 ObjectCreated                     │
-└────────────────────────┬────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                  Orchestration Layer (Step Functions)            │
-│                                                                  │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐     │
-│  │   Schema     │───▶│   Bedrock    │───▶│  Contract    │     │
-│  │   Analyzer   │    │  AI Analysis │    │  Generator   │     │
-│  └──────────────┘    └──────────────┘    └──────────────┘     │
-│         │                    │                    │             │
-│         ▼                    ▼                    ▼             │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐     │
-│  │   Staging    │───▶│  Production  │───▶│     SNS      │     │
-│  │  Validator   │    │  Controller  │    │   Alerts     │     │
-│  └──────────────┘    └──────────────┘    └──────────────┘     │
-└─────────────────────────────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      Processing Layer                            │
-│  AWS Glue ETL → Athena Validation → S3 Curated/Quarantine      │
-└─────────────────────────────────────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                       Storage Layer                              │
-│  DynamoDB (Schema History, Approvals, Agent Memory, State)     │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 ### Technology Stack
 
 | Layer | Technology | Justification |
