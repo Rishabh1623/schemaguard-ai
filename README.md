@@ -88,33 +88,32 @@ Instead of treating schema drift as a **failure event**, SchemaGuard AI treats i
 
 ## Live System Screenshots
 
-### Step Functions Workflow Execution
+### Step Functions Workflow 
 ![Step Functions Execution](screenshots/step-functions-execution.png)
-*Real-time orchestration of 4 Lambda agents with visual workflow tracking and execution history*
 
-### Lambda Functions
+
+### Step Functions Workflow
 ![Lambda Functions](screenshots/lambda-functions.png)
-*Production-deployed Lambda functions: Schema Analyzer, Contract Generator, ETL Patch Agent, and Staging Validator*
 
-### DynamoDB Tables
+
+### Step Functions Workflow
 ![DynamoDB Tables](screenshots/dynamodb-tables.png)
-*4 DynamoDB tables managing schema history, contract approvals, agent memory, and execution state*
+
 
 ### S3 Buckets
 ![S3 Buckets](screenshots/S3%20Buckets.png)
 *Complete data flow infrastructure: Raw, Staging, Curated, Quarantine, Contracts, and Scripts buckets*
 
-### Schema Analysis Output
+### DynamoDB Tables
 ![Schema Analyzer Output](screenshots/schema-analyzer-output.png)
-*Real-time schema change detection with risk classification and impact assessment*
+
 
 ### CloudWatch Monitoring
 ![CloudWatch Logs](screenshots/CloudWatch.png)
 *Complete observability with logs, metrics, and audit trails for all system components*
 
-### Execution Results
+### Lambda
 ![Execution Results](screenshots/execution-results.png)
-*End-to-end processing results showing automated decision-making and data routing*
 
 ---
 
