@@ -102,26 +102,20 @@ Instead of treating schema drift as a **failure event**, SchemaGuard AI treats i
 
 ### S3 Buckets
 ![S3 Buckets](screenshots/S3%20Buckets.png)
-*Complete data flow infrastructure: Raw, Staging, Curated, Quarantine, Contracts, and Scripts buckets*
 
 ### DynamoDB Tables
 ![Schema Analyzer Output](screenshots/schema-analyzer-output.png)
-*Real-time schema change detection with risk classification and impact assessment*
 
 ### CloudWatch Monitoring
 ![CloudWatch Logs](screenshots/CloudWatch.png)
-*Complete observability with logs, metrics, and audit trails for all system components*
 
 ### Email Notifications
 ![Email Notification 1](screenshots/email-notification-1.png)
-*Real-time SNS email alerts for schema changes with detailed risk assessment and recommendations*
 
 ![Email Notification 2](screenshots/email-notification-2.png)
-*Automated notifications showing change type, affected fields, and required actions*
 
 ### Execution Results
 ![Execution Results](screenshots/execution-results.png)
-*End-to-end processing results showing automated decision-making and data routing*
 
 ---
 
