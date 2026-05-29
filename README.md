@@ -7,7 +7,7 @@
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)]()
 
 **Repository:** https://github.com/Rishabh1623/schemaguard-ai  
-**Region:** us-east-1 | **Account:** 543927035352
+**Region:** us-east-1 | **Account:** XXXXXXXXXXX
 
 ---
 
